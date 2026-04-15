@@ -1,0 +1,80 @@
+seed: 42
+num_workers: 4
+device: cuda
+
+paths:
+  data_root: ./data_root
+  output_root: ./outputs
+  teacher_ckpt: ./outputs/teacher/best.pt
+  scorer_ckpt: ./outputs/scorer/best.pt
+
+image:
+  full_h: 768
+  full_w: 1088
+  canonical_h: 640
+  canonical_w: 192
+  scorer_h: 640
+  scorer_w: 256
+  canonical_margin_y: 24
+  canonical_margin_x: 48
+  scorer_margin_y: 24
+  scorer_margin_x: 128
+  band_kernel: 31
+  pred_bin_thresh: 0.4
+
+normalization:
+  kv_percentile_low: 1.0
+  kv_percentile_high: 99.0
+  drr_percentile_low: 1.0
+  drr_percentile_high: 99.0
+
+candidates:
+  shifts: [-8, -6, -4, -2, 0, 2, 4, 6, 8]
+  shift_prior_lambda: 0.02
+  tau: 0.5
+
+teacher:
+  epochs: 80
+  batch_size: 8
+  lr: 0.0002
+  weight_decay: 0.00001
+
+scorer:
+  epochs: 80
+  batch_size: 8
+  lr: 0.0002
+  weight_decay: 0.00001
+  rank_margin: 0.2
+  list_ce_weight: 1.0
+  rank_weight: 0.5
+  synthetic:
+    blur_sigma_min: 1.0
+    blur_sigma_max: 3.0
+    contrast_min: 0.7
+    contrast_max: 1.3
+    gamma_min: 0.8
+    gamma_max: 1.3
+    noise_std_min: 0.0
+    noise_std_max: 0.04
+    shading_scale_min: 0.05
+    shading_scale_max: 0.2
+    bone_alpha_min: 0.15
+    bone_alpha_max: 0.45
+    drr_alpha_min: 0.5
+    drr_alpha_max: 0.9
+
+student:
+  epochs: 120
+  batch_size: 2
+  lr: 0.00015
+  weight_decay: 0.00001
+  lambda_pos: 1.0
+  lambda_shape: 0.4
+  lambda_axis: 0.1
+  lambda_conf: 0.2
+  teacher_mask_weight: 1.0
+  teacher_rowwidth_weight: 0.5
+
+save:
+  save_every: 5
+  keep_last: 3

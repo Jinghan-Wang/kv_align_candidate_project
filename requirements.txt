@@ -1,0 +1,7 @@
+torch
+numpy
+PyYAML
+Pillow
+tqdm
+SimpleITK
+matplotlib
